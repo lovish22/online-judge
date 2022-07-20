@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <style>
+    .alert {
+      padding: 20px;
+      background-color:red;
+      color: white;
+    }
+    
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .closebtn:hover {
+      color: black;
+    }
+    </style>
+  </head>
+
+  <body>
+    <div class="alert">
+      <span class="closebtn"
+        onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>&#9888;</strong>Username already taken!
+    </div>
+
+    <h1 align="center">New User registration</h1>
+
+    <form action="/oj/usercheck/" method="post" style="display:inline">
+      <label for="username">Enter a Username:&nbsp;</label>
+      <input type="text" id="username" name="username" placeholder="ABC"><br><br>
+      <label for="password">Choose a Password:&nbsp;</label>
+      <input type="password" id="password" name="password"><br>
+      <input type="submit" val="Register">
+    </form>
+
+  </body>
+</html>

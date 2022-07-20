@@ -1,0 +1,48 @@
+<head>
+    <style>
+        table,th,td{
+            border:1px solid black;
+            color:black;
+        }
+        table{
+            width:100%;
+        }
+        .ACCEPTED{
+            background-color:rgb(47, 255, 57);
+            color:black;
+        }
+        .WRONG_ANSWER{
+            background-color:rgb(255, 0, 0);
+            color: black;
+        }
+        .a{
+            color:blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 align="center">Recent Submissions</h1>
+    {%if solutions%}
+    <table>
+        <tr>
+            <th>Problem Name</th>
+            <th>Submitted By</th>
+            <th>Submission Verdict</th>
+            <th>Submission Time</th>
+        </tr>
+        {%for solution in solutions%}
+        <tr>
+            <td class="{{solution.verdict}}">
+                <a
+                    href="/oj/{{solution.user.username}}/{{solution.problem.id}}/">{{solution.problem.Name}}</a></td>
+            <td class="{{solution.verdict}}">{{solution.user.username}}</td>
+            <td class="{{solution.verdict}}">{{solution.verdict}}</td>
+            <td class="{{solution.verdict}}">{{solution.submission_time}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+    {%else%}
+    <p>No Submission has been made uptil Now</p>
+    {%endif%}
+</body>

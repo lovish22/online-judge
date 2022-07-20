@@ -1,0 +1,49 @@
+<head>
+    <style>
+        table,th,td{
+            border: 1px solid black;
+            background-color: blanchedalmond;
+            margin-top:0px;
+
+        }
+        table{
+
+            width:75%;
+
+        }
+        body{
+            background-color: #252324;
+        }
+        .problemset{
+            background-color:#F2AA4CFF;
+            width:75%;
+            margin-left: 12.5%;
+            margin-bottom:0px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1 class="problemset" align="center">Problemset</h1>
+    {% if problems %}
+    <table align="center">
+        <tr>
+            <th><h3>Problem-Name</h3></th>
+            <th><h3>Problem-Level</h3></th>
+        </tr>
+        <tr>
+            <ol>
+                {%for problem in problems%}
+                <tr>
+                    <td><li><a href='/oj/{{user.username}}/{{problem.id}}/'>{{problem.Name}}</a></li></td>
+                    <td>{{problem.Level}}</td>
+                </tr>
+                {%endfor%}
+            </ol>
+        </tr>
+    </table>
+    {% else %}
+    <p><h2>No problems are available for now.</h2></p>
+    {%endif%}
+</body>

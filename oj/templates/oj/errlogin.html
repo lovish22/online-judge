@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <style>
+    .alert {
+      padding: 20px;
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .closebtn:hover {
+      color: black;
+    }
+    </style>
+    </head>
+
+    <body>
+        <div class="alert">
+            <span class="closebtn"
+                onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>&#9888;</strong>The password or username entered is
+            incorrect.
+        </div>
+
+        <h1 align="center">Login Details</h1>
+
+        <form action="/oj/logcheck/" method="post">
+            {% csrf_token %}
+            <fieldset align="center">
+                <label for="username">Username:&nbsp;</label>
+                <input type="text" id="username" name="username"
+                    placeholder="Username"><br><br>
+                <label for="password">Password:&nbsp;</label>
+                <input type="password" id="password" name="password"><br><br>
+                <input type="submit" value="Login">&nbsp;&nbsp;
+                <a href="/oj/newuser/">New User</a>
+            </fieldset>
+        </form>
+
+
+    </body>
+</html>

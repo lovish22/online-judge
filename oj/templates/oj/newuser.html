@@ -1,0 +1,10 @@
+<h1 align="center">New User registration</h1>
+
+<form action="/oj/usercheck/" method="post">
+    {% csrf_token %}
+    <label for="username">Enter a Username:&nbsp;</label>
+    <input type="text" id="username" name="username" placeholder="ABC"><br><br>
+    <label for="password">Choose a Password:&nbsp;</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Register">
+</form>

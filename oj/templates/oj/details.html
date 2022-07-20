@@ -1,0 +1,14 @@
+
+<h1 align="center">{{problem.Name}}</h1>
+<p>{{problem.Statement}}</p>
+
+<form action="/oj/{{user.username}}/{{problem.id}}/submit/"
+    enctype="multipart/form-data"
+    method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Submit your code</legend>
+        <input type="file" id="solution" name="solution" value="solution">
+        <input type="submit" value="Submit">
+    </fieldset>
+</form>
