@@ -1,14 +1,26 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf8">
+    <style>
+        body
+        {
+            font-family: "Times New Roman", Times, serif;
+            background-color: peachpuff;
+        }
+    </style>
+</head>
 
-<h1 align="center">{{problem.Name}}</h1>
-<p>{{problem.Statement}}</p>
+<body>
+    <h1 align="center">{{problem.Name}}</h1>
+    <p>{{problem.Statement|linebreaks}}</p>
 
-<form action="/oj/{{user.username}}/{{problem.id}}/submit/"
-    enctype="multipart/form-data"
-    method="post">
-    {% csrf_token %}
-    <fieldset>
-        <legend>Submit your code</legend>
-        <input type="file" id="solution" name="solution" value="solution">
-        <input type="submit" value="Submit">
-    </fieldset>
-</form>
+    <form action="/oj/{{user.username}}/{{problem.id}}/submit/"
+        enctype="multipart/form-data"
+        method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Submit your code</legend>
+            <input type="file" id="solution" name="solution" value="solution">
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+</body>

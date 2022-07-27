@@ -3,8 +3,13 @@ from .models import Problem, Solution, TestCases, User
 from django.urls import reverse
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-import os, filecmp
-import sys
+from mysite.settings import BASE_DIR
+import os, filecmp, sys
+import docker
+import subprocess
+from docker.models.containers import Container
+
+client = docker.from_env()
 
 # Will point towards Login Pge
 def login(request):
@@ -33,44 +38,86 @@ def problem_details(request, user_name, problem_id):
 
 
 def submission(request, user_name, problem_id):
-    sol = request.FILES["solution"]
-    with open("oj/Evaluation/sol.cpp", "wb+") as destination:
-        for chunk in sol.chunks():
-            destination.write(chunk)
+    recieved_file = request.FILES["solution"]
+
+    sol = "oj/Evaluation/cod.py"
+    inp = "oj/Evaluation/inp.txt"
+    actout = "oj/Evaluation/actout.txt"
+
     problem = get_object_or_404(Problem, pk=problem_id)
     user = get_object_or_404(User, pk=user_name)
 
-    verdict = "ACCEPTED"
-    sol = "oj/Evaluation/sol.cpp"
-    inp = "oj/Evaluation/inp.txt"
-    out = "oj/Evaluation/out.txt"
-    actout = "oj/Evaluation/actout.txt"
+    with open(sol, "wb+") as destination:
+        for chunk in recieved_file.chunks():
+            destination.write(chunk)
 
+    container: Container = client.containers.get("oj")
+    if container.status != "running":
+        container.start()
+
+    subprocess.run(["docker", "cp", sol, container.id + ":sol.py"])
+    verdict = "ACCEPTED"
     for testcase in problem.testcases_set.all():
         with open(inp, "w+") as destination:
             for i in testcase.input:
                 destination.write(i)
-        os.system("g++ oj/Evaluation/sol.cpp")
-        os.system("a.exe <oj/Evaluation/inp.txt >oj/Evaluation/out.txt")
+
+        text = testcase.output
         with open(actout, "w+") as destination:
-            for i in testcase.output:
-                destination.write(i)
-        if filecmp.cmp(out, actout, shallow=False):
+            destination.write(text)
 
+        # string = "python " + sol + " <" + inp + " >" + out
+        # os.system(string)
+        # os.system("a.exe <oj/Evaluation/inp.txt >oj/Evaluation/out.txt")
+        # with open(actout, "w+") as destination:
+        #     for i in testcase.output:
+        #         destination.write(i)
+        # if filecmp.cmp(out, actout, shallow=False):
+
+        #     verdict = "ACCEPTED"
+        # else:
+
+        #     verdict = "WRONG_ANSWER"
+        #     break
+
+        subprocess.run(["docker", "cp", inp, container.id + ":inp.txt"])
+        subprocess.run(
+            [
+                "docker",
+                "exec",
+                container.id,
+                "bash",
+                "-c",
+                "python sol.py <inp.txt >out.txt",
+            ]
+        )
+        out = str(BASE_DIR) + "/oj/Evaluation/out.txt"
+        subprocess.run(["docker", "cp", container.id + ":out.txt", out])
+
+        with open(out, "r") as f:
+            text = f.read().rstrip()
+        with open(out, "w+") as f:
+            f.write(text)
+
+        if filecmp.cmp(actout, out, shallow=False):
             verdict = "ACCEPTED"
-
         else:
-
             verdict = "WRONG_ANSWER"
             break
+
     recent_solution = Solution()
     recent_solution.problem = Problem.objects.get(pk=problem_id)
     recent_solution.verdict = verdict
     recent_solution.submission_time = timezone.now()
-    recent_solution.code_file = sol
+
+    with open(sol, "r") as f:
+        text = f.read()
+    recent_solution.code_file = text[10:]
+
     recent_solution.user = User.objects.get(pk=user_name)
     recent_solution.save()
 
+    subprocess.run(["docker", "stop", container.id])
     return HttpResponseRedirect(reverse("leaderboard"))
 
 

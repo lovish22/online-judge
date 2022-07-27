@@ -1,13 +1,27 @@
-<h1 align="center">Login Details</h1>
+<html>
+    <head>
+        <style>
+            body {
+                background-color:aquamarine;
+                font-size: medium;
+            }
+        </style>
+    </head>
 
-<form action="/oj/logcheck/" method="post">
-    {% csrf_token %}
-    <fieldset align="center">
-        <label for="username">Username:&nbsp;</label>
-        <input type="text" id="username" name="username" placeholder="Username"><br><br>
-        <label for="password">Password:&nbsp;</label>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">&nbsp;&nbsp;
-        <a href="/oj/newuser/">New User</a>
-    </fieldset>
-</form>
+    <body>
+        <h1 align="center">Login Details</h1>
+
+        <form action="/oj/logcheck/" method="post">
+            {% csrf_token %}
+            <fieldset align="center">
+                <label for="username">Username:&nbsp;</label>
+                <input type="text" id="username" name="username"
+                    placeholder="Username"><br><br>
+                <label for="password">Password:&nbsp;</label>
+                <input type="password" id="password" name="password"><br><br>
+                <input type="submit" value="Login">&nbsp;&nbsp;
+                <a href="/oj/newuser/">New User</a>
+            </fieldset>
+        </form>
+    </body>
+</html>
